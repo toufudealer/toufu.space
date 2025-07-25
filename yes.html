@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Pong</title>
+  <link rel="stylesheet" href="yes.css">
+</head>
+<body>
+  <canvas id="matrix-bg"></canvas>
+  <div id="start-container">
+    <div id="start-inner">
+      <button id="start-btn">Başla</button>
+      <div id="controls">
+        Paddle'ı mouse ile veya ekrana/parmağa dokunup sürükleyerek oynayabilirsin.<br>
+        <span style="font-size:0.9em;opacity:0.7;">(Kaybedersen sürpriz var!)</span><br>
+        <span style="color:#ff5555; font-size:0.95em; font-weight:bold;">
+          UYARI: Bu oyun ani görüntüler ve yüksek ses içerir. Epilepsi veya kalp rahatsızlığınız varsa lütfen oynamayınız!
+        </span>
+      </div>
+    </div>
+  </div>
+  <canvas id="pong" width="700" height="450" style="display:none"></canvas>
+  <div id="jumpscare" style="display:none;justify-content:center;align-items:center;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#000;">
+    <video id="jumpscare-video" src="resources/jumpscare.mp4" style="width:100vw;height:100vh;object-fit:cover;" autoplay muted playsinline></video>
+    <audio id="jumpscare-audio" src="resources/jumpscare.mp3"></audio>
+  </div>
+  <div id="rickroll" style="display:none;justify-content:center;align-items:center;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#000;">
+    <video id="rickroll-video" src="resources/rickroll.mp4" style="width:100vw;height:100vh;object-fit:cover;" autoplay muted playsinline></video>
+    <audio id="rickroll-audio" src="resources/rickroll.mp3"></audio>
+  </div>
+  <script>
+    // Başlangıç ekranı ve oyun başlatma
+    const startContainer = document.getElementById('start-container');
+    const startBtn = document.getElementById('start-btn');
+    const canvas = document.getElementById('pong');
+    const ctx = canvas.getContext('2d');
+    let player, ai, ball, gameOver, gameStarted = false;
+
+    startBtn.onclick = () => {
+      startContainer.style.display = 'none';
+      canvas.style.display = 'block';
+      startGame();
+    };
+
+    function startGame() {
+      player = { x: 20, y: canvas.height/2 - 40, w: 14, h: 80 };
+      ai = { x: canvas.width - 34, y: canvas.height/2 - 40, w: 14, h: 80 };
+      ball = { x: canvas.width/2, y: canvas.height/2, r: 12, dx: 3, dy: 3 };
+      gameOver = false;
+      gameStarted = true;
+      loop();
+    }
+
+    // Mouse ile paddle kontrolü
+    canvas.addEventListener('mousemove', function(e) {
+      if (!gameStarted) return;
+      const rect = canvas.getBoundingClientRect();
+      const mouseY = e.clientY - rect.top;
+      player.y = Math.max(0, Math.min(canvas.height - player.h, mouseY - player.h / 2));
+    });
+
+    // Mobil dokunma ile paddle kontrolü
+    canvas.addEventListener('touchmove', function(e) {
+      if (!gameStarted) return;
+      const rect = canvas.getBoundingClientRect();
+      const touchY = e.touches[0].clientY - rect.top;
+      player.y = Math.max(0, Math.min(canvas.height - player.h, touchY - player.h / 2));
+      e.preventDefault();
+    }, { passive: false });
+
+    function drawRect(obj, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
+    }
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+    }
+    function resetBall() {
+      ball.x = canvas.width/2;
+      ball.y = canvas.height/2;
+      ball.dx = 3 * (Math.random() > 0.5 ? 1 : -1);
+      ball.dy = 3 * (Math.random() > 0.5 ? 1 : -1);
+    }
+    function showJumpscare() {
+      document.getElementById('start-container').style.display = 'none';
+      document.getElementById('pong').style.display = 'none';
+      document.getElementById('matrix-bg').style.display = 'none';
+      document.getElementById('rickroll').style.display = 'none';
+      document.getElementById('jumpscare').style.display = 'flex';
+      const video = document.getElementById('jumpscare-video');
+      video.currentTime = 0;
+      video.play();
+      // Arka plan sesi başlat
+      const audio = document.getElementById('jumpscare-audio');
+      audio.currentTime = 0;
+      audio.play();
+    }
+    function showRickroll() {
+      document.getElementById('start-container').style.display = 'none';
+      document.getElementById('pong').style.display = 'none';
+      document.getElementById('matrix-bg').style.display = 'none';
+      document.getElementById('jumpscare').style.display = 'none';
+      document.getElementById('rickroll').style.display = 'flex';
+      const video = document.getElementById('rickroll-video');
+      video.currentTime = 0;
+      video.play();
+      // Arka plan sesi başlat
+      const audio = document.getElementById('rickroll-audio');
+      audio.currentTime = 0;
+      audio.play();
+    }
+    function hideRickroll() {
+      // Rickroll ekranını gizle ve oyunu sıfırla
+      document.getElementById('rickroll').style.display = 'none';
+      startContainer.style.display = 'flex';
+      canvas.style.display = 'none';
+      player = ai = ball = null;
+      gameOver = true;
+    }
+    function loop() {
+      if (gameOver) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // AI hareketi
+      if (ai.y + ai.h/2 < ball.y) ai.y += 2.2;
+      else if (ai.y + ai.h/2 > ball.y) ai.y -= 2.2;
+      ai.y = Math.max(0, Math.min(canvas.height - ai.h, ai.y));
+
+      // Top hareketi
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      // Duvar çarpması
+      if (ball.y - ball.r < 0 || ball.y + ball.r > canvas.height) ball.dy *= -1;
+
+      // Paddle çarpması
+      if (
+        ball.x - ball.r < player.x + player.w &&
+        ball.y > player.y && ball.y < player.y + player.h
+      ) {
+        ball.x = player.x + player.w + ball.r; // paddle'ın dışına it
+        ball.dx *= -1;
+      }
+      if (
+        ball.x + ball.r > ai.x &&
+        ball.y > ai.y && ball.y < ai.y + ai.h
+      ) {
+        ball.x = ai.x - ball.r; // paddle'ın dışına it
+        ball.dx *= -1;
+      }
+
+      // Kaybetme kontrolü (soldan çıkarsa)
+      if (ball.x + ball.r < 0) {
+        gameOver = true;
+        setTimeout(showJumpscare, 300);
+      }
+      // AI kaybederse Rickroll
+      if (ball.x - ball.r > canvas.width) {
+        gameOver = true;
+        showRickroll();
+      }
+
+      // Çizimler
+      drawRect(player, "#00ff0a");
+      drawRect(ai, "#00ff0a");
+      drawBall();
+
+      requestAnimationFrame(loop);
+    }
+
+    // Matrix yağmur efekti
+    const matrixCanvas = document.getElementById('matrix-bg');
+    const ctxMatrix = matrixCanvas.getContext('2d');
+    let matrixW = window.innerWidth;
+    let matrixH = window.innerHeight;
+    matrixCanvas.width = matrixW;
+    matrixCanvas.height = matrixH;
+
+    const letters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const fontSize = 18;
+    let columns = Math.floor(matrixW / fontSize);
+    let drops = Array(columns).fill(1);
+
+    let matrixSpeed = 0.5; // 1 daha hızlı, 0.5 daha yavaş, 0.2 çok yavaş
+    let matrixFrame = 0;
+
+    function drawMatrix() {
+      matrixFrame += matrixSpeed;
+      if (matrixFrame < 1) {
+        requestAnimationFrame(drawMatrix);
+        return;
+      }
+      matrixFrame = 0;
+
+      ctxMatrix.fillStyle = 'rgba(16,32,16,0.15)';
+      ctxMatrix.fillRect(0, 0, matrixW, matrixH);
+      ctxMatrix.font = fontSize + "px 'Share Tech Mono', monospace";
+      ctxMatrix.fillStyle = '#00ff41';
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctxMatrix.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > matrixH && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+
+    window.addEventListener('resize', () => {
+      matrixW = window.innerWidth;
+      matrixH = window.innerHeight;
+      matrixCanvas.width = matrixW;
+      matrixCanvas.height = matrixH;
+      columns = Math.floor(matrixW / fontSize);
+      drops = Array(columns).fill(1);
+    });
+
+    drawMatrix();
+  </script>
+</body>
+</html>

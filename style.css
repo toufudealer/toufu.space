@@ -41,8 +41,17 @@ body {
   justify-content: center;
   gap: 16px;
   margin-bottom: 24px;
+  background: rgba(30, 30, 30, 0.225); /* Yarı saydam koyu arka plan */
+  border-radius: 16px;
+  padding: 12px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.185);
+  transition: background 0.3s, scale 0.3s; /* Eklendi */
 }
 
+.sosyal-medya:hover {
+  background: rgba(30, 30, 30, 0.45);
+  scale: 1.05;
+}
 .sosyal-medya img {
   transition: transform 0.2s;
   cursor: pointer;
