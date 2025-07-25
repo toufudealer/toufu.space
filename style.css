@@ -36,6 +36,21 @@ body {
     margin-left: 350px; /* Butonu sağa kaydırır */
 }
 
+.sosyal-medya {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sosyal-medya img {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.sosyal-medya img:hover {
+  transform: scale(1.15);
+}
 .orta-nokta-buton {
     padding: 20px 40px;
     background-color: #00000024;
