@@ -22,7 +22,6 @@ body {
     background-repeat: no-repeat;
     z-index: 0;
     pointer-events: none;
-    filter: contrast(2);
 }
 
 .content {
