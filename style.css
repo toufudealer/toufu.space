@@ -22,7 +22,7 @@ body {
     background-repeat: no-repeat;
     z-index: 0;
     pointer-events: none;
-    filter: contrast(5);
+    filter: contrast(2);
 }
 
 .content {
@@ -61,17 +61,41 @@ body {
   transform: scale(1.15);
 }
 .orta-nokta-buton {
-    padding: 20px 40px;
+    padding: 16px 32px;      /* Daha az padding */
+    min-width: 160px;        /* Sabit minimum genişlik */
+    max-width: 280px;        /* Maksimum genişlik */
     background-color: #00000024;
     color: #ffffff;
     border: 1px solid #ffffff;      /* İnce ve beyaz kenarlık */
     border-radius: 20px;         /* Daha yuvarlak köşe */
-    font-size: 1.5em;
+    font-size: 1.2em;        /* Biraz daha küçük font */
     cursor: pointer;
     box-shadow: 0 5px 15px #00000033;
     transition: background-color 0.3s ease, scale 0.2s;
+    text-align: center;
+    white-space: nowrap;     /* Tek satırda tutar */
 }
 .orta-nokta-buton:hover {
     background-color: #9284ff;
     scale: 1.05; /* Hover efekti için ölçeklendirme */
+}
+.orta-nokta-buton + .orta-nokta-buton {
+  margin-top: 15px; /* İki orta-nokta-buton arasında ekstra boşluk */
+}
+.toufu-kutu {
+  background: linear-gradient(120deg, #101a1020 0%, #00000000 100%);
+  color: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #00ff4000, 0 0 0 2px #00ff4000 inset;
+  border: 2px solid #ffffff00;
+  padding: 24px 32px;
+  font-size: 2em;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Consolas', monospace;
+  text-align: center;
+  margin: 16px auto;
+  max-width: 400px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-shadow: 0 0 8px #000000cc, 0 0 2px rgba(0, 25, 0, 0);
+  transition: box-shadow 0.2s, background 0.2s;
 }

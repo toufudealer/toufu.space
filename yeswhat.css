@@ -1,0 +1,110 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent; /* Arka planı tamamen saydam yap */
+}
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+canvas {
+  background: linear-gradient(90deg, rgba(20,30,48,0.7) 0%, rgba(36,59,85,0.7) 100%);
+  border-radius: 18px;
+  box-shadow: 0 12px 40px #000a, 0 0 0 2px #243b55 inset;
+  display: block;
+  border: 2px solid #243b55;
+  z-index: 1;
+}
+#score {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #00ffea;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2em;
+  text-shadow: 0 0 12px #00ffea99, 0 0 2px #243b55;
+  z-index: 2;
+  letter-spacing: 2px;
+  padding: 8px 24px;
+  background: rgba(20, 30, 48, 0.7);
+  border-radius: 12px;
+  border: 1px solid #243b55;
+  box-shadow: 0 2px 12px #00ffea22;
+}
+.cube-select {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(20,30,48,0.85);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cube-select h2 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2.4em;
+  color: #00ffea;
+  text-shadow: 0 0 24px #00ffea99, 0 2px 8px #222;
+  letter-spacing: 4px;
+  margin-bottom: 18px;
+  background: linear-gradient(90deg, #00ffea 0%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 0;
+}
+#cube-options {
+  display: flex;
+  gap: 24px;
+  margin: 24px 0;
+}
+.cube-option {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 3px solid #00ffea;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 2px 12px #00ffea44;
+}
+.cube-option.selected {
+  border-color: #ffd700;
+  box-shadow: 0 0 24px #ffd70088;
+}
+#start-btn {
+  padding: 12px 32px;
+  font-size: 1.2em;
+  border-radius: 8px;
+  border: none;
+  background: #00ffea;
+  color: #222;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 12px;
+}
