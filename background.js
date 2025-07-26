@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
     './resources/backgrounds/yes.jpg',
     './resources/backgrounds/ambatukam.jpg',
     './resources/backgrounds/cem.jpg',
-    './resources/backgrounds/.jpg',
+    './resources/backgrounds/kojima.jpg',
 
   ];
 
