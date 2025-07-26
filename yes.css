@@ -135,6 +135,14 @@ body {
   margin-right: auto;
 }
 
+#jumpscare video {
+  max-width: 98vw;
+  max-height: 70vh;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   background: #111;
@@ -154,4 +162,32 @@ body {
 body > *:not(#matrix-bg) {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 600px) {
+  #jumpscare img {
+    max-width: 98vw;
+    max-height: 70vh;
+    border-radius: 8px;
+    margin: 0 auto;
+    display: block;
+  }
+  #jumpscare {
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+  #rickroll img,
+  #rickroll video {
+    max-width: 98vw;
+    max-height: 70vh;
+    border-radius: 8px;
+    margin: 0 auto;
+    display: block;
+  }
+  #rickroll {
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
 }
