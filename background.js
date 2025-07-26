@@ -5,9 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
     './resources/backgrounds/aigis.jpg',
     './resources/backgrounds/yes.jpg',
     './resources/backgrounds/ambatukam.jpg',
-    './resources/backgrounds/cem.jpg',
-    './resources/backgrounds/kojima.jpg',
-
+    './resources/backgrounds/cem.jpg'
   ];
 
   const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
