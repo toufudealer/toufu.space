@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="enter-overlay">
+    <div id="enter-text">girmek için tıkla</div>
+  </div>
   <div class="background-container"></div>
   <div class="content">
     <div class="toufu-kutu" style="margin-bottom:16px; text-align:center;">
@@ -30,5 +33,138 @@
     <button class="orta-nokta-buton" onclick="window.location.href='yeswhat.html'">evet?</button>
   </div>
   <script src="background.js"></script>
+  <script src="playlist.js"></script>
+
+  <!-- Çalma Listesi Kutusu -->
+  <div id="playlist-box">
+    <ul id="playlist-ul"></ul>
+  </div>
+
+  <!-- Müzik Kontrol Butonları -->
+  <div id="media-controls">
+    <button id="playlist-btn" title="Çalma Listesi">☰</button>
+    <button id="play-pause-btn" title="Oynat/Durdur">▶</button>
+    <div id="song-title"></div>
+    <button id="prev-btn" title="Önceki Şarkı">«</button>
+    <button id="next-btn" title="Sonraki Şarkı">»</button>
+    <div class="volume-controls">
+        <button id="mute-btn" title="Sesi Aç/Kapat">🔊</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
+    </div>
+  </div>
+
+  <!-- Arka Plan Müziği -->
+  <audio id="background-music"></audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Elementleri Seçelim ---
+      const enterOverlay = document.getElementById('enter-overlay');
+      const music = document.getElementById('background-music');
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const muteBtn = document.getElementById('mute-btn');
+      const songTitle = document.getElementById('song-title');
+      const volumeSlider = document.getElementById('volume-slider');
+      const playlistBtn = document.getElementById('playlist-btn');
+      const playlistBox = document.getElementById('playlist-box');
+      const playlistUL = document.getElementById('playlist-ul');
+
+      let currentTrackIndex = 0;
+
+      // --- Çalma Listesini Doldurma ---
+      function populatePlaylist() {
+        playlistUL.innerHTML = '';
+        musicPlaylist.forEach((song, index) => {
+            const li = document.createElement('li');
+            li.textContent = song.name;
+            li.dataset.index = index;
+            playlistUL.appendChild(li);
+        });
+      }
+
+      // --- Fonksiyonlar ---
+      function loadTrack(trackIndex) {
+        const track = musicPlaylist[trackIndex];
+        music.src = track.src;
+        songTitle.textContent = track.name; // Şarkı adını ekrana yazdır
+        document.querySelectorAll('#playlist-ul li').forEach(item => item.classList.remove('playing'));
+        document.querySelector(`#playlist-ul li[data-index='${trackIndex}']`).classList.add('playing');
+
+        // Artık kullanıcı etkileşimi garantili olduğu için doğrudan oynatabiliriz.
+        music.play().then(() => {
+            playPauseBtn.textContent = '❚❚';
+        }).catch(error => console.error("Müzik oynatılamadı:", error));
+      }
+
+      function playTrack() {
+        music.play();
+        playPauseBtn.textContent = '❚❚';
+      }
+
+      function pauseTrack() {
+        music.pause();
+        playPauseBtn.textContent = '▶';
+      }
+
+      function prevTrack() {
+        currentTrackIndex = (currentTrackIndex - 1 + musicPlaylist.length) % musicPlaylist.length;
+        loadTrack(currentTrackIndex);
+      }
+
+      function nextTrack() {
+        currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length;
+        loadTrack(currentTrackIndex);
+      }
+
+      // --- Olay Dinleyicileri (Event Listeners) ---
+      playPauseBtn.addEventListener('click', () => (music.paused ? playTrack() : pauseTrack()));
+      prevBtn.addEventListener('click', prevTrack);
+      nextBtn.addEventListener('click', nextTrack);
+      muteBtn.addEventListener('click', () => { music.muted = !music.muted; });
+      volumeSlider.addEventListener('input', e => { music.volume = e.target.value; music.muted = false; });
+      
+      music.addEventListener('volumechange', () => {
+        volumeSlider.value = music.volume;
+        if (music.muted || music.volume === 0) {
+            muteBtn.textContent = '🔇';
+        } else {
+            muteBtn.textContent = '🔊';
+        }
+      });
+
+      music.addEventListener('ended', nextTrack); // Şarkı bitince otomatık sonrakine geç
+
+      playlistBtn.addEventListener('click', () => playlistBox.classList.toggle('visible'));
+      playlistUL.addEventListener('click', e => {
+        if (e.target && e.target.nodeName === 'LI') {
+            const newIndex = parseInt(e.target.dataset.index, 10);
+            currentTrackIndex = newIndex;
+            loadTrack(currentTrackIndex);
+        }
+      });
+
+      // --- Giriş Ekranı ve Başlatma ---
+      music.volume = 0.2;
+      volumeSlider.value = music.volume;
+      populatePlaylist();
+
+      enterOverlay.addEventListener('click', () => {
+        // 1. Overlay'i yavaşça yok et
+        enterOverlay.style.opacity = '0';
+        enterOverlay.addEventListener('transitionend', () => {
+          enterOverlay.style.display = 'none';
+        });
+
+        // 2. Blur efektini kaldır
+        document.body.classList.add('site-active');
+
+        // 3. Müziği başlat
+        currentTrackIndex = Math.floor(Math.random() * musicPlaylist.length);
+        loadTrack(currentTrackIndex);
+      }, { once: true }); // Bu olay dinleyicisi sadece bir kere çalışır
+    });
+  </script>
 </body>
 </html>

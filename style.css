@@ -4,11 +4,47 @@ html, body {
     padding: 0;
 }
 
+/* Giriş Ekranı */
+#enter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 100; /* Her şeyin üstünde olmasını sağlar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.8s ease-out;
+}
+
+#enter-text {
+    color: white;
+    font-size: 2.5em;
+    font-family: 'Share Tech Mono', monospace;
+    text-shadow: 0 0 15px white, 0 0 25px white;
+    animation: pulse 2.5s infinite;
+    user-select: none; /* Yazının fare ile seçilmesini engeller */
+}
+
 body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Başlangıçta site içeriğini blurlu yap */
+body > *:not(#enter-overlay):not(script) {
+    filter: blur(10px);
+    transition: filter 0.8s ease-out;
+}
+
+/* Tıklandıktan sonra blur'u kaldır */
+body.site-active > *:not(#enter-overlay):not(script) {
+    filter: none;
 }
 
 .background-container {
@@ -91,13 +127,15 @@ body {
   font-size: 2em;
   font-family: 'Share Tech Mono', 'Fira Mono', 'Consolas', monospace;
   text-align: center;
-  margin: 16px auto;
+  margin: 0 auto 24px; /* Üst boşluğu kaldırdık, alt boşluğu ayarladık */
   max-width: 400px;
   letter-spacing: 2px;
   font-weight: bold;
   text-shadow: 0 0 8px #000000cc, 0 0 2px rgba(0, 25, 0, 0);
   transition: box-shadow 0.2s, background 0.2s;
 }
+
+
 
 /* Mobil uyumluluk için */
 @media (max-width: 600px) {
@@ -128,3 +166,142 @@ body {
 }
 
 /* Ekran boyutunu algılayan viewport meta tag'ı HTML <head> kısmına ekle: */
+
+/* Medya Kontrol Butonları */
+#media-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    width: fit-content;
+    align-items: center; /* Butonları ve yazıyı dikeyde ortalar */
+    background: rgba(30, 30, 30, 0.45);
+    padding: 10px 15px;
+    border-radius: 50px; /* Hap şeklinde */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
+}
+
+#media-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 0 5px;
+}
+
+#media-controls button:hover {
+    transform: scale(1.15);
+}
+
+/* Çalan Şarkı Adı */
+#song-title {
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9em;
+    margin: 0 5px;
+    min-width: 80px; /* Minimum genişlik */
+    max-width: 200px; /* Maksimum genişlik, daha fazlası ... ile gösterilir */
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+}
+
+/* Ses Kontrolü */
+.volume-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Çalma Listesi */
+#playlist-box {
+    position: fixed;
+    bottom: 115px; /* İlerleme çubuğunun üstünde */
+    left: 20px;
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 8;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    transform: translateY(20px);
+}
+
+#playlist-box.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#playlist-ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+#playlist-ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#playlist-ul li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#playlist-ul li.playing {
+    background-color: rgba(146, 132, 255, 0.4);
+    color: #fff;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 1; }
+}
