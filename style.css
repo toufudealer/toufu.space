@@ -173,7 +173,7 @@ body.site-active > *:not(#enter-overlay):not(script) {
     bottom: 20px;
     left: 20px;
     z-index: 10;
-    display: flex;
+    display: none; /* Başlangıçta gizli, JS ile görünür yapılacak */
     gap: 10px;
     width: fit-content;
     align-items: center; /* Butonları ve yazıyı dikeyde ortalar */
@@ -182,6 +182,10 @@ body.site-active > *:not(#enter-overlay):not(script) {
     border-radius: 50px; /* Hap şeklinde */
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
+}
+
+#media-controls.visible {
+    display: flex;
 }
 
 #media-controls button {
@@ -242,19 +246,10 @@ body.site-active > *:not(#enter-overlay):not(script) {
     cursor: pointer;
 }
 
-#volume-slider::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-    border: none;
-}
-
 /* Çalma Listesi */
 #playlist-box {
     position: fixed;
-    bottom: 115px; /* İlerleme çubuğunun üstünde */
+    bottom: 80px; /* Kontrol panelinin üstünde */
     left: 20px;
     background: rgba(30, 30, 30, 0.6);
     backdrop-filter: blur(8px);
@@ -275,29 +270,16 @@ body.site-active > *:not(#enter-overlay):not(script) {
     transform: translateY(0);
 }
 
-#playlist-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-}
+#playlist-ul { list-style: none; margin: 0; padding: 0; color: #e0e0e0; font-family: 'Share Tech Mono', monospace; }
+#playlist-ul li { padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: background-color 0.2s; }
+#playlist-ul li:hover { background-color: rgba(255, 255, 255, 0.1); }
+#playlist-ul li.playing { background-color: rgba(146, 132, 255, 0.4); color: #fff; font-weight: bold; }
 
-#playlist-ul li {
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-#playlist-ul li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#playlist-ul li.playing {
-    background-color: rgba(146, 132, 255, 0.4);
-    color: #fff;
-    font-weight: bold;
+/* SoundCloud'un kendi oynatıcısını gizle */
+#soundcloud-player-container {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
 }
 
 @keyframes pulse {
