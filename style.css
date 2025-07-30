@@ -173,19 +173,27 @@ body.site-active > *:not(#enter-overlay):not(script) {
     bottom: 20px;
     left: 20px;
     z-index: 10;
-    display: none; /* Başlangıçta gizli, JS ile görünür yapılacak */
-    gap: 10px;
-    width: fit-content;
-    align-items: center; /* Butonları ve yazıyı dikeyde ortalar */
+    display: none; /* JS ile görünür yapılacak */
+    flex-direction: column; /* Dikey hizalama için */
+    gap: 8px; /* İlerleme çubuğu ve kontroller arası boşluk */
+    min-width: 350px; /* Minimum genişlik verelim */
     background: rgba(30, 30, 30, 0.45);
     padding: 10px 15px;
-    border-radius: 50px; /* Hap şeklinde */
+    border-radius: 15px; /* Daha modern, yuvarlak köşeli kutu */
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
 }
 
 #media-controls.visible {
     display: flex;
+}
+
+/* Ana kontrol butonlarını (play, next vs.) içeren sarmalayıcı */
+#main-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
 #media-controls button {
@@ -206,7 +214,7 @@ body.site-active > *:not(#enter-overlay):not(script) {
 #song-title {
     color: #e0e0e0;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.9em;
+    font-size: 1em;
     margin: 0 5px;
     min-width: 80px; /* Minimum genişlik */
     max-width: 200px; /* Maksimum genişlik, daha fazlası ... ile gösterilir */
@@ -214,6 +222,7 @@ body.site-active > *:not(#enter-overlay):not(script) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-grow: 1; /* Esneyerek boşluğu doldurur */
     cursor: default;
 }
 
@@ -246,17 +255,54 @@ body.site-active > *:not(#enter-overlay):not(script) {
     cursor: pointer;
 }
 
+/* İlerleme Çubuğu */
+#progress-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Çubuk ve zaman göstergesi arası boşluk */
+    padding: 0 5px; /* Kenarlardan hafif boşluk */
+    box-sizing: border-box;
+}
+
+#progress-bar-bg {
+    flex-grow: 1; /* Kalan tüm boşluğu kapla */
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 3px;
+    cursor: pointer;
+    overflow: hidden; /* progress-bar'ın dışarı taşmasını engelle */
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%; /* JS ile güncellenecek */
+    background-color: #9284ff;
+    border-radius: 3px;
+    transition: width 0.1s linear; /* Akıcı geçiş için */
+}
+
+#time-display {
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85em;
+    user-select: none; /* Seçilemez yap */
+    min-width: 75px; /* 0:00 / 00:00 gibi yazıların sığması için */
+}
+
 /* Çalma Listesi */
 #playlist-box {
     position: fixed;
-    bottom: 80px; /* Kontrol panelinin üstünde */
+    bottom: 110px; /* Kontrol panelinin üstünde */
     left: 20px;
     background: rgba(30, 30, 30, 0.6);
     backdrop-filter: blur(8px);
     border-radius: 15px;
     padding: 10px;
-    max-height: 250px;
+    max-height: 200px; /* 5 şarkıdan sonra kaydırma çubuğu göstermek için */
     overflow-y: auto;
+    scrollbar-width: thin; /* Firefox için */
+    scrollbar-color: rgba(146, 132, 255, 0.7) rgba(255, 255, 255, 0.1); /* Firefox için (başparmak ve iz rengi) */
     z-index: 8;
     opacity: 0;
     visibility: hidden;
@@ -275,11 +321,19 @@ body.site-active > *:not(#enter-overlay):not(script) {
 #playlist-ul li:hover { background-color: rgba(255, 255, 255, 0.1); }
 #playlist-ul li.playing { background-color: rgba(146, 132, 255, 0.4); color: #fff; font-weight: bold; }
 
-/* SoundCloud'un kendi oynatıcısını gizle */
-#soundcloud-player-container {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+/* Çalma Listesi için özel kaydırma çubuğu */
+#playlist-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+#playlist-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#playlist-box::-webkit-scrollbar-thumb {
+    background: rgba(146, 132, 255, 0.7); /* Ana renk tonu */
+    border-radius: 10px;
 }
 
 @keyframes pulse {
