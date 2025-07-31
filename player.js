@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentDuration = 0;
 
   // --- Fonksiyonlar ---
+
+  // Media Session API için şarkı bilgilerini güncelleyen fonksiyon
+  function updateMediaSession(sound) {
+    if (!('mediaSession' in navigator) || !sound) {
+      return; // API desteklenmiyorsa veya ses bilgisi yoksa çık
+    }
+
+    // SoundCloud'dan gelen albüm kapağını daha yüksek çözünürlüklü hale getirelim
+    const artworkSrc = sound.artwork_url ? sound.artwork_url.replace('-large.jpg', '-t500x500.jpg') : '';
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: sound.title,
+      artist: sound.user.username || 'toufu.space',
+      album: 'toufu.space playlist',
+      artwork: [{ src: artworkSrc, sizes: '500x500', type: 'image/jpeg' }]
+    });
+  }
+
   function updateSongInfo() {
     widget.getCurrentSound((sound) => {
       if (sound) {
@@ -33,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
           currentDuration = duration || 0;
           timeDisplay.textContent = `0:00 / ${formatTime(currentDuration)}`;
         });
+
+        // Windows medya kontrollerini güncelle
+        updateMediaSession(sound);
       }
     });
   }
@@ -78,10 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
     playerUiContainer.classList.add('visible');
 
     widget.bind(SC.Widget.Events.READY, () => {
-      widget.setVolume(lastVolume * 100);
-      populatePlaylist();
-      widget.play();
+      // --- Media Session API Entegrasyonu ---
+      // Tarayıcı destekliyorsa, işletim sistemi medya kontrolleri için eylemleri ayarla
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', () => widget.play());
+        navigator.mediaSession.setActionHandler('pause', () => widget.pause());
+        navigator.mediaSession.setActionHandler('previoustrack', () => widget.prev());
+        navigator.mediaSession.setActionHandler('nexttrack', () => widget.next());
+      }
 
+      // ÖNEMLİ: Olay dinleyicilerini (bind), olayı tetikleyecek komuttan (play) ÖNCE ayarlamalıyız.
+      // Bu sayede ilk şarkının PLAY olayını kaçırmamış oluruz.
       widget.bind(SC.Widget.Events.PLAY, () => { playPauseBtn.textContent = '❚❚'; updateSongInfo(); });
       widget.bind(SC.Widget.Events.PAUSE, () => { playPauseBtn.textContent = '▶'; });
       widget.bind(SC.Widget.Events.PLAY_PROGRESS, (progressData) => {
@@ -94,6 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
+      // Ayarları yapıp oynatıcıyı başlatalım
+      widget.setVolume(lastVolume * 100);
+      populatePlaylist();
+      widget.play();
     });
   }, { once: true });
 
@@ -102,9 +134,36 @@ document.addEventListener('DOMContentLoaded', () => {
   prevBtn.addEventListener('click', () => widget.prev());
   nextBtn.addEventListener('click', () => widget.next());
   playlistBtn.addEventListener('click', () => playlistBox.classList.toggle('visible'));
-  playlistUL.addEventListener('click', e => { if (e.target.matches('li')) widget.skip(parseInt(e.target.dataset.index)); });
-  volumeSlider.addEventListener('input', e => { lastVolume = e.target.value; widget.setVolume(lastVolume * 100); });
-  muteBtn.addEventListener('click', () => { widget.getVolume(v => { if (v > 0) widget.setVolume(0); else widget.setVolume(lastVolume * 100); }); });
+  playlistUL.addEventListener('click', e => {
+    if (e.target.matches('li')) {
+      widget.skip(parseInt(e.target.dataset.index));
+    }
+  });
+
+  volumeSlider.addEventListener('input', e => {
+    const newVolume = parseFloat(e.target.value);
+    widget.setVolume(newVolume * 100);
+    muteBtn.textContent = newVolume > 0 ? '🔊' : '🔇';
+    // Sesi tekrar açmak için son ses seviyesini (0'dan büyükse) kaydet
+    if (newVolume > 0) {
+      lastVolume = newVolume;
+    }
+  });
+
+  muteBtn.addEventListener('click', () => {
+    widget.getVolume(v => { // v, 0-100 aralığındadır
+      if (v > 0) { // Sesi kapatıyorsak
+        widget.setVolume(0);
+        volumeSlider.value = 0;
+        muteBtn.textContent = '🔇';
+      } else { // Sesi açıyorsak
+        widget.setVolume(lastVolume * 100);
+        volumeSlider.value = lastVolume;
+        muteBtn.textContent = '🔊';
+      }
+    });
+  });
+
   progressBarBg.addEventListener('click', (e) => {
     widget.getDuration((duration) => {
       if (duration) {
@@ -120,5 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  widget.bind(SC.Widget.Events.VOLUME, (data) => { muteBtn.textContent = data.newVolume > 0 ? '🔊' : '🔇'; });
+
+  // Bu olay dinleyici, sesin Media Session API gibi harici bir yolla
+  // değişmesi durumunda UI'ın senkronize kalmasını sağlar.
+  widget.bind(SC.Widget.Events.VOLUME, (data) => {
+    const newVolume = data.newVolume / 100;
+    volumeSlider.value = newVolume; // Slider'ı senkronize et
+    muteBtn.textContent = newVolume > 0 ? '🔊' : '🔇'; // İkonu senkronize et
+  });
 });
