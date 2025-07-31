@@ -163,6 +163,44 @@ body.site-active > *:not(#enter-overlay):not(script) {
     gap: 10px;
     padding: 8px 6px;
   }
+
+  /* Mobil için Müzik Çalar Düzenlemeleri */
+  #player-ui-container {
+      width: auto; /* Genişliği otomatik ayarla */
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      gap: 8px; /* Liste ve kontroller arası boşluk */
+  }
+
+  #media-controls {
+      padding: 8px 12px;
+  }
+
+  #main-controls {
+      gap: 5px; /* Butonlar arası boşluğu azalt */
+  }
+
+  #media-controls button {
+      font-size: 1.4em; /* İkonları biraz küçült */
+      padding: 0 4px;
+  }
+
+  #song-title {
+      font-size: 0.9em; /* Şarkı adı fontunu küçült */
+  }
+
+  .volume-controls {
+      gap: 5px;
+  }
+
+  #volume-slider {
+      width: 60px; /* Ses çubuğunu daralt */
+  }
+
+  #playlist-box {
+      max-height: 180px; /* Çalma listesi yüksekliğini azalt */
+  }
 }
 
 /* Ekran boyutunu algılayan viewport meta tag'ı HTML <head> kısmına ekle: */
@@ -372,13 +410,11 @@ body.site-active > *:not(#enter-overlay):not(script) {
 
 #playlist-ul li {
     display: block;
-    padding: 8px 12px;
+    padding: 12px 15px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     transition: background-color 0.2s;
-}
-/* Metin kısaltma stillerini, sadece liste JS ile tamamen doldurulduktan sonra uygula */
-#playlist-box.populated #playlist-ul li {
+    margin-bottom: 2px; /* Öğeler arasına hafif boşluk */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
