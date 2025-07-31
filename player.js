@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Elementleri Seçelim ---
   const enterOverlay = document.getElementById('enter-overlay');
   const iframeElement = document.getElementById('soundcloud-widget');
-  const mediaControls = document.getElementById('media-controls');
+  const playerUiContainer = document.getElementById('player-ui-container');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   let widget = SC.Widget(iframeElement);
   let lastVolume = 0.2;
+  let currentDuration = 0;
 
   // --- Fonksiyonlar ---
   function updateSongInfo() {
@@ -25,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (sound) {
         songTitle.textContent = sound.title;
         highlightCurrentTrack(sound.id);
+        // Yeni şarkı başladığında ilerleme çubuğunu ve zamanı anında sıfırla.
+        progressBar.style.width = '0%';
+        // Süreyi alıp hem arayüzü güncelle hem de ileride kullanmak üzere sakla
+        widget.getDuration((duration) => {
+          currentDuration = duration || 0;
+          timeDisplay.textContent = `0:00 / ${formatTime(currentDuration)}`;
+        });
       }
     });
   }
@@ -32,12 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function populatePlaylist() {
     widget.getSounds((sounds) => {
       playlistUL.innerHTML = '';
+      playlistBox.classList.remove('populated'); // Önce temizle
       sounds.forEach((sound, index) => {
         const li = document.createElement('li');
         li.textContent = sound.title;
         li.dataset.index = index;
         li.dataset.id = sound.id;
         playlistUL.appendChild(li);
+      });
+      // "F5 atınca bozulma" sorununu kalıcı olarak çözmek için:
+      // Tarayıcının listeyi çizmesi için bir sonraki "frame"i bekliyoruz.
+      // Ardından, metinleri kısaltan CSS'i tetikleyecek sınıfı ekliyoruz.
+      // Bu, tarayıcının düzeni her zaman doğru hesaplamasını sağlar.
+      requestAnimationFrame(() => {
+        playlistBox.classList.add('populated');
       });
     });
   }
@@ -59,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     enterOverlay.style.opacity = '0';
     enterOverlay.addEventListener('transitionend', () => enterOverlay.style.display = 'none');
     document.body.classList.add('site-active');
-    mediaControls.classList.add('visible');
+    playerUiContainer.classList.add('visible');
 
     widget.bind(SC.Widget.Events.READY, () => {
       widget.setVolume(lastVolume * 100);
@@ -69,10 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
       widget.bind(SC.Widget.Events.PLAY, () => { playPauseBtn.textContent = '❚❚'; updateSongInfo(); });
       widget.bind(SC.Widget.Events.PAUSE, () => { playPauseBtn.textContent = '▶'; });
       widget.bind(SC.Widget.Events.PLAY_PROGRESS, (progressData) => {
-        const { currentPosition, duration } = progressData;
-        if (duration) {
-          progressBar.style.width = `${(currentPosition / duration) * 100}%`;
-          timeDisplay.textContent = `${formatTime(currentPosition)} / ${formatTime(duration)}`;
+        const { currentPosition } = progressData;
+        // Sadece sakladığımız toplam süre geçerli bir değerse arayüzü güncelle.
+        if (currentDuration) {
+          const percentage = (currentPosition / currentDuration) * 100;
+          progressBar.style.width = `${percentage}%`;
+          timeDisplay.textContent = `${formatTime(currentPosition)} / ${formatTime(currentDuration)}`;
         }
       });
 
@@ -90,7 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
   progressBarBg.addEventListener('click', (e) => {
     widget.getDuration((duration) => {
       if (duration) {
-        const seekPosition = (e.offsetX / progressBarBg.clientWidth) * duration;
+        const barWidth = progressBarBg.clientWidth;
+        const clickX = e.offsetX;
+        const seekPercentage = clickX / barWidth;
+        const seekPosition = duration * seekPercentage;
+        // Anında görsel geri bildirim için arayüzü hemen güncelle
+        progressBar.style.width = `${seekPercentage * 100}%`;
+        timeDisplay.textContent = `${formatTime(seekPosition)} / ${formatTime(duration)}`;
+        // SoundCloud oynatıcısını yeni konuma atla
         widget.seekTo(seekPosition);
       }
     });

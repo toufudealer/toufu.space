@@ -33,30 +33,36 @@
     <button class="orta-nokta-buton" onclick="window.location.href='yeswhat.html'">evet?</button>
   </div>
 
-  <!-- Çalma Listesi Kutusu -->
-  <div id="playlist-box">
-    <ul id="playlist-ul"></ul>
-  </div>
-
-  <!-- Özel Medya Kontrol Butonları -->
-  <div id="media-controls">
-    <!-- İlerleme Çubuğu -->
-    <div id="progress-container">
-      <div id="progress-bar-bg">
-          <div id="progress-bar"></div>
+  <!-- Oynatıcı Arayüzü Sarmalayıcısı -->
+  <div id="player-ui-container">
+    <!-- Özel Medya Kontrol Butonları -->
+    <div id="media-controls">
+      <!-- İlerleme Çubuğu -->
+      <div id="progress-container">
+        <div id="progress-bar-bg">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="time-display">0:00 / 0:00</div>
       </div>
-      <div id="time-display">0:00 / 0:00</div>
+      <div id="main-controls">
+        <button id="playlist-btn" title="Çalma Listesi">☰</button>
+        <button id="play-pause-btn" title="Oynat/Durdur">▶</button>
+        <div id="song-title">Yükleniyor...</div>
+        <button id="prev-btn" title="Önceki Şarkı">«</button>
+        <button id="next-btn" title="Sonraki Şarkı">»</button>
+        <div class="volume-controls">
+            <button id="mute-btn" title="Sesi Aç/Kapat">🔊</button>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
+        </div>
+      </div>
     </div>
-    <div id="main-controls">
-      <button id="playlist-btn" title="Çalma Listesi">☰</button>
-      <button id="play-pause-btn" title="Oynat/Durdur">▶</button>
-      <div id="song-title">Yükleniyor...</div>
-      <button id="prev-btn" title="Önceki Şarkı">«</button>
-      <button id="next-btn" title="Sonraki Şarkı">»</button>
-      <div class="volume-controls">
-          <button id="mute-btn" title="Sesi Aç/Kapat">🔊</button>
-          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
+
+    <!-- Çalma Listesi Kutusu -->
+    <div id="playlist-box">
+      <div class="playlist-header">
+        <span>Çalma Listesi</span>
       </div>
+      <ul id="playlist-ul"></ul>
     </div>
   </div>
 

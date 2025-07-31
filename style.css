@@ -169,22 +169,33 @@ body.site-active > *:not(#enter-overlay):not(script) {
 
 /* Medya Kontrol Butonları */
 #media-controls {
+    /* Konumlandırma stilleri sarmalayıcıya taşındı */
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* İlerleme çubuğu ve kontroller arası boşluk */
+    background: rgba(30, 30, 30, 0.45);
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
+    width: 100%; /* Sarmalayıcının genişliğini doldur */
+    box-sizing: border-box;
+}
+
+/* Oynatıcı arayüzünü (çalma listesi + kontroller) saran ana kap */
+#player-ui-container {
     position: fixed;
     bottom: 20px;
     left: 20px;
     z-index: 10;
-    display: none; /* JS ile görünür yapılacak */
-    flex-direction: column; /* Dikey hizalama için */
-    gap: 8px; /* İlerleme çubuğu ve kontroller arası boşluk */
-    min-width: 350px; /* Minimum genişlik verelim */
-    background: rgba(30, 30, 30, 0.45);
-    padding: 10px 15px;
-    border-radius: 15px; /* Daha modern, yuvarlak köşeli kutu */
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
+    display: none; /* Başlangıçta gizli, JS ile görünür yapılacak */
+    width: 420px;
+    display: flex;
+    flex-direction: column-reverse; /* Çalma listesini üste alır */
+    gap: 10px; /* Kontroller ve liste arası boşluk */
 }
 
-#media-controls.visible {
+#player-ui-container.visible {
     display: flex;
 }
 
@@ -280,6 +291,7 @@ body.site-active > *:not(#enter-overlay):not(script) {
     background-color: #9284ff;
     border-radius: 3px;
     transition: width 0.1s linear; /* Akıcı geçiş için */
+    pointer-events: none; /* Tıklama olaylarının arka plana (progressBarBg) gitmesini sağlar */
 }
 
 #time-display {
@@ -290,50 +302,94 @@ body.site-active > *:not(#enter-overlay):not(script) {
     min-width: 75px; /* 0:00 / 00:00 gibi yazıların sığması için */
 }
 
-/* Çalma Listesi */
+/* Çalma Listesi (Yeniden Düzenlendi) */
 #playlist-box {
-    position: fixed;
-    bottom: 110px; /* Kontrol panelinin üstünde */
-    left: 20px;
-    background: rgba(30, 30, 30, 0.6);
-    backdrop-filter: blur(8px);
-    border-radius: 15px;
-    padding: 10px;
-    max-height: 200px; /* 5 şarkıdan sonra kaydırma çubuğu göstermek için */
-    overflow-y: auto;
-    scrollbar-width: thin; /* Firefox için */
-    scrollbar-color: rgba(146, 132, 255, 0.7) rgba(255, 255, 255, 0.1); /* Firefox için (başparmak ve iz rengi) */
-    z-index: 8;
+    background: rgba(30, 30, 30, 0.65);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    
+    /* Flexbox ile iç düzeni daha stabil hale getiriyoruz */
+    display: flex;
+    flex-direction: column;
+    
+    /* Animasyon ve başlangıç durumu */
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
-    transform: translateY(20px);
+    transform: translateY(15px) scale(0.98);
+    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+
 }
 
 #playlist-box.visible {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
-#playlist-ul { list-style: none; margin: 0; padding: 0; color: #e0e0e0; font-family: 'Share Tech Mono', monospace; }
-#playlist-ul li { padding: 8px 12px; cursor: pointer; border-radius: 5px; transition: background-color 0.2s; }
-#playlist-ul li:hover { background-color: rgba(255, 255, 255, 0.1); }
-#playlist-ul li.playing { background-color: rgba(146, 132, 255, 0.4); color: #fff; font-weight: bold; }
+.playlist-header {
+    padding: 10px 15px;
+    font-family: 'Share Tech Mono', monospace;
+    color: #e0e0e0;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0; /* Başlığın küçülmesini engeller */
+    user-select: none;
+}
 
-/* Çalma Listesi için özel kaydırma çubuğu */
-#playlist-box::-webkit-scrollbar {
+#playlist-ul {
+    list-style: none;
+    margin: 0;
+    padding: 8px; /* Kenarlara boşluk */
+    color: #e0e0e0;
+    font-family: 'Share Tech Mono', monospace;
+    
+    /* Kaydırılabilir alan */
+    overflow-y: auto;
+    max-height: 220px; /* Yaklaşık 6-7 şarkı */
+    
+    /* Tarayıcı uyumlu kaydırma çubuğu stilleri */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(146, 132, 255, 0.7) rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit tabanlı tarayıcılar için özel kaydırma çubuğu */
+#playlist-ul::-webkit-scrollbar {
     width: 8px;
 }
-
-#playlist-box::-webkit-scrollbar-track {
+#playlist-ul::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
-
-#playlist-box::-webkit-scrollbar-thumb {
+#playlist-ul::-webkit-scrollbar-thumb {
     background: rgba(146, 132, 255, 0.7); /* Ana renk tonu */
     border-radius: 10px;
+}
+
+#playlist-ul li {
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+/* Metin kısaltma stillerini, sadece liste JS ile tamamen doldurulduktan sonra uygula */
+#playlist-box.populated #playlist-ul li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#playlist-ul li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+#playlist-ul li.playing {
+    background-color: rgba(146, 132, 255, 0.4);
+    color: #fff;
+    font-weight: bold;
 }
 
 @keyframes pulse {
