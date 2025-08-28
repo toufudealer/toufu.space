@@ -171,6 +171,12 @@ window.addEventListener('load', () => {
     const minScale = 0.95;    // Minimum scale (reduced outward zoom)
 
     function applyFishEyeEffect() {
+        // Disable fish-eye effect on mobile layouts
+        if (window.innerWidth <= 768) {
+            contentWrapper.style.transform = 'none';
+            return;
+        }
+
         const currentScrollY = window.scrollY;
         // Calculate scrollEnd dynamically to account to account for varying content heights
         const scrollEnd = document.body.scrollHeight - window.innerHeight;
@@ -195,6 +201,9 @@ window.addEventListener('load', () => {
 
     // Apply effect on scroll
     window.addEventListener('scroll', applyFishEyeEffect);
+
+    // Re-apply effect on resize to handle orientation changes or window resizing
+    window.addEventListener('resize', applyFishEyeEffect);
 
     // Anime.js animation for skill badges on scroll
     const skillsContainer = document.querySelector('.skills-container');
