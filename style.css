@@ -23,7 +23,8 @@ body {
     width: 100%;
     height: 100vh;
     background-image: url('resources/standard.png');
-    background-size: 100% auto;
+    background-size: 100% 200%; /* Make the image twice as tall as the viewport */
+    background-position: top center; /* Start from the top center */
     background-repeat: no-repeat;
     filter: brightness(0.6);
     filter: saturate(1.1);
