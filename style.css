@@ -345,12 +345,23 @@ h1 {
         flex-direction: column;
         align-items: center;
         width: 95%;
+        padding: 15px;
     }
 
     .profile-section {
         flex: 1;
         width: 100%;
         margin-bottom: 20px;
+        padding: 15px;
+    }
+
+    .profile-pic-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+
+    .username {
+        font-size: 1.3em;
     }
 
     .social-media-section,
@@ -358,6 +369,15 @@ h1 {
     .about-me-section {
         width: 100%;
         margin-bottom: 20px;
+        padding: 15px;
+    }
+
+    .nav-button {
+        font-size: 1em;
+    }
+
+    .about-me-section h2 {
+        font-size: 1.5em;
     }
 
     #scroll-box {
@@ -377,5 +397,29 @@ h1 {
     .system-specs-container ul {
         padding-left: 0;
         list-style-position: inside;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .profile-pic-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+
+    .username {
+        font-size: 1.2em;
+    }
+
+    .about-me-section h2 {
+        font-size: 1.3em;
+    }
+
+    .nav-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
     }
 }
