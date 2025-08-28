@@ -394,6 +394,35 @@ window.addEventListener('load', () => {
 
         observer.observe(header);
     });
+
+    // Project card hover animations
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+        const enterAnimation = () => {
+            anime({
+                targets: card,
+                scale: 1.03,
+                boxShadow: '0 10px 20px rgba(0,0,0,0.25)',
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        };
+
+        const leaveAnimation = () => {
+            anime({
+                targets: card,
+                scale: 1,
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        };
+
+        card.addEventListener('mouseenter', enterAnimation);
+        card.addEventListener('mouseleave', leaveAnimation);
+        card.addEventListener('touchstart', enterAnimation);
+        card.addEventListener('touchend', leaveAnimation);
+    });
 });
 
 // TV Static effect on social links
