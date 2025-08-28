@@ -1,435 +1,341 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-/* Giriş Ekranı */
-#enter-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 100; /* Her şeyin üstünde olmasını sağlar */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: opacity 0.8s ease-out;
-}
-
-#enter-text {
-    color: white;
-    font-size: 2.5em;
-    font-family: 'Share Tech Mono', monospace;
-    text-shadow: 0 0 15px white, 0 0 25px white;
-    animation: pulse 2.5s infinite;
-    user-select: none; /* Yazının fare ile seçilmesini engeller */
+html {
+    height: 100%; /* Ensure html takes full viewport height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 body {
-    min-height: 100vh;
+    margin: 0;
+    font-family: 'Press Start 2P', cursive; /* Hotline Miami font */
+    color: #00FFFF; /* Neon Cyan */
+    background-color: #13001a; /* Even darker purple */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../resources/standard.png'); /* Darken overlay */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+#content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-/* Başlangıçta site içeriğini blurlu yap */
-body > *:not(#enter-overlay):not(script) {
-    filter: blur(10px);
-    transition: filter 0.8s ease-out;
+.main-container {
+    display: flex;
+    justify-content: flex-start; /* Ensures items are pushed to ends */
+    align-items: stretch; /* Ensures items are pushed to ends */
+    width: 90%; /* Wider container for better separation */
+    max-width: 1200px; /* Max width for larger screens */
+    padding: 20px;
+    background-color: rgba(255, 0, 255, 0.1); /* More transparent Neon Pink */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6); /* Dual neon glow */
+    gap: 10px; /* Space between the two main sections */
+    z-index: 1; /* Ensure content is above VHS overlay */
+    position: relative; /* Ensure z-index works */
+    margin-bottom: 50px; /* Add space below main-container */
+    margin-top: 50px; /* Add space above main-container */
 }
 
-/* Tıklandıktan sonra blur'u kaldır */
-body.site-active > *:not(#enter-overlay):not(script) {
-    filter: none;
+#scroll-box {
+    width: 90%; /* Wider container for better separation */
+    max-width: 1200px; /* Max width for larger screens */
+    padding: 20px;
+    background-color: rgba(255, 0, 255, 0.1); /* More transparent Neon Pink */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6); /* Dual neon glow */
+    z-index: 1; /* Ensure content is above VHS overlay */
+    position: relative; /* Ensure z-index works */
+    margin-bottom: 50px; /* Add space below scroll-box */
+    margin-top: 50px; /* Add space above scroll-box */
+    height: 800px;
+    text-align: center;
+    color: white;
 }
 
-.background-container {
+.profile-section {
+    flex: 0 0 300px; /* Fixed width for profile section */
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly more transparent */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Neon Cyan Glow */
+}
+
+.profile-pic-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden; /* This is the key for clipping */
+    margin: 0 auto 10px auto; /* Center and provide margin below */
+    border: 3px solid #fff; /* Keep the white border here */
+}
+
+.profile-pic {
+    width: 100%; /* Fill the wrapper */
+    height: 100%; /* Fill the wrapper */
+    object-fit: cover; /* Ensure image covers the area */
+    /* Removed border, border-radius, margin-bottom from here */
+}
+
+.username {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0;
+}
+
+.social-media-section {
+    flex-grow: 0; /* Prevent it from growing */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Changed to center to align icons vertically */
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly more transparent */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.7); /* Neon Pink Glow */
+}
+
+.navigation-section {
+    flex-grow: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Neon Cyan Glow */
+    gap: 15px; /* Space between buttons */
+}
+
+.nav-button {
+    display: block;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); /* Neon Cyan Glow */
+    color: #00FFFF; /* Neon Cyan */
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 255, 255, 0.2); /* Lighter neon cyan on hover */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); /* Stronger glow on hover */
+    transform: translateY(-3px);
+}
+
+.social-media-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+.social-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    padding: 5px; /* Added padding for clickable area */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #00bcd4;
+    transform: translateY(-3px);
+}
+
+.social-icon img {
+    height: 32px;
+    width: 32px;
+    margin-bottom: 5px; /* Space between icon and text */
+}
+
+h1 {
+    display: none;
+}
+
+/* About Me Section Styles */
+.about-me-section {
+    flex-grow: 1; /* Allow it to take up remaining space */
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly more transparent */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7); /* Neon Green Glow */
+    text-align: center; /* Align text to the center */
+}
+
+.scroll-box-section {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly more transparent */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7); /* Neon Green Glow */
+}
+
+.scroll-box-heading-container {
+    padding: 10px 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.computer-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.system-specs-container {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+    text-align: left;
+}
+
+.skills-container {
+    margin-top: 20px;
+}
+
+.about-me-section h2 {
+    margin-top: 0;
+    color: #00FFFF; /* Neon Cyan */
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.about-me-section p {
+    color: #FF00FF; /* Neon Pink */
+    line-height: 1.6;
+}
+
+/* VHS Overlay Styles */
+#vhs-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-size: 100% 100%;   /* Stretch: resmi tam ekrana yayar */
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px; /* Butonu aşağı kaydırır */
-    margin-left: 350px; /* Butonu sağa kaydırır */
-}
-
-.sosyal-medya {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  background: rgba(30, 30, 30, 0.372); /* Yarı saydam koyu arka plan */
-  border-radius: 16px;
-  padding: 12px 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.185);
-  transition: background 0.3s, scale 0.3s; /* Eklendi */
-}
-
-.sosyal-medya:hover {
-  background: rgba(30, 30, 30, 0.45);
-  scale: 1.05;
-}
-.sosyal-medya img {
-  transition: transform 0.2s;
-  cursor: pointer;
-}
-
-.sosyal-medya img:hover {
-  transform: scale(1.15);
-}
-.orta-nokta-buton {
-    padding: 16px 32px;      /* Daha az padding */
-    min-width: 160px;        /* Sabit minimum genişlik */
-    max-width: 280px;        /* Maksimum genişlik */
-    background-color: #00000024;
-    color: #ffffff;
-    border: 1px solid #ffffff;      /* İnce ve beyaz kenarlık */
-    border-radius: 20px;         /* Daha yuvarlak köşe */
-    font-size: 1.2em;        /* Biraz daha küçük font */
-    cursor: pointer;
-    box-shadow: 0 5px 15px #00000033;
-    transition: background-color 0.3s ease, scale 0.2s;
-    text-align: center;
-    white-space: nowrap;     /* Tek satırda tutar */
-}
-.orta-nokta-buton:hover {
-    background-color: #9284ff;
-    scale: 1.05; /* Hover efekti için ölçeklendirme */
-}
-.orta-nokta-buton + .orta-nokta-buton {
-  margin-top: 15px; /* İki orta-nokta-buton arasında ekstra boşluk */
-}
-.toufu-kutu {
-  background: linear-gradient(120deg, #101a1020 0%, #00000000 100%);
-  color: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px #00ff4000, 0 0 0 2px #00ff4000 inset;
-  border: 2px solid #ffffff00;
-  padding: 24px 32px;
-  font-size: 2em;
-  font-family: 'Share Tech Mono', 'Fira Mono', 'Consolas', monospace;
-  text-align: center;
-  margin: 0 auto 24px; /* Üst boşluğu kaldırdık, alt boşluğu ayarladık */
-  max-width: 400px;
-  letter-spacing: 2px;
-  font-weight: bold;
-  text-shadow: 0 0 8px #000000cc, 0 0 2px rgba(0, 25, 0, 0);
-  transition: box-shadow 0.2s, background 0.2s;
-}
-
-
-
-/* Mobil uyumluluk için */
-@media (max-width: 600px) {
-  .content {
-    margin-left: 0 !important;
-    margin-top: 24px;
-    width: 98vw;
-    max-width: 100vw;
-    padding: 0 4vw;
-    box-sizing: border-box;
-  }
-  .toufu-kutu {
-    font-size: 1.2em;
-    padding: 12px 8px;
-    max-width: 98vw;
-  }
-  .orta-nokta-buton {
-    min-width: 120px;
-    max-width: 90vw;
-    font-size: 1em;
-    padding: 10px 8px;
-  }
-  .sosyal-medya {
-    flex-direction: row;
-    gap: 10px;
-    padding: 8px 6px;
-  }
-
-  /* Mobil için Müzik Çalar Düzenlemeleri */
-  #player-ui-container {
-      width: auto; /* Genişliği otomatik ayarla */
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      gap: 8px; /* Liste ve kontroller arası boşluk */
-  }
-
-  #media-controls {
-      padding: 8px 12px;
-  }
-
-  #main-controls {
-      gap: 5px; /* Butonlar arası boşluğu azalt */
-  }
-
-  #media-controls button {
-      font-size: 1.4em; /* İkonları biraz küçült */
-      padding: 0 4px;
-  }
-
-  #song-title {
-      font-size: 0.9em; /* Şarkı adı fontunu küçült */
-  }
-
-  .volume-controls {
-      gap: 5px;
-  }
-
-  #volume-slider {
-      width: 60px; /* Ses çubuğunu daralt */
-  }
-
-  #playlist-box {
-      max-height: 180px; /* Çalma listesi yüksekliğini azalt */
-  }
-}
-
-/* Ekran boyutunu algılayan viewport meta tag'ı HTML <head> kısmına ekle: */
-
-/* Medya Kontrol Butonları */
-#media-controls {
-    /* Konumlandırma stilleri sarmalayıcıya taşındı */
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* İlerleme çubuğu ve kontroller arası boşluk */
-    background: rgba(30, 30, 30, 0.45);
-    padding: 10px 15px;
-    border-radius: 15px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(5px); /* Arka plana bulanıklık efekti */
-    width: 100%; /* Sarmalayıcının genişliğini doldur */
-    box-sizing: border-box;
-}
-
-/* Oynatıcı arayüzünü (çalma listesi + kontroller) saran ana kap */
-#player-ui-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 10;
-    display: none; /* Başlangıçta gizli, JS ile görünür yapılacak */
-    width: 420px;
-    display: flex;
-    flex-direction: column-reverse; /* Çalma listesini üste alır */
-    gap: 10px; /* Kontroller ve liste arası boşluk */
-}
-
-#player-ui-container.visible {
-    display: flex;
-}
-
-/* Ana kontrol butonlarını (play, next vs.) içeren sarmalayıcı */
-#main-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     width: 100%;
-}
-
-#media-controls button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5em;
-    cursor: pointer;
-    transition: transform 0.2s;
-    padding: 0 5px;
-}
-
-#media-controls button:hover {
-    transform: scale(1.15);
-}
-
-/* Çalan Şarkı Adı */
-#song-title {
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 1em;
-    margin: 0 5px;
-    min-width: 80px; /* Minimum genişlik */
-    max-width: 200px; /* Maksimum genişlik, daha fazlası ... ile gösterilir */
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-grow: 1; /* Esneyerek boşluğu doldurur */
-    cursor: default;
-}
-
-/* Ses Kontrolü */
-.volume-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-#volume-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 80px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-#volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 15px;
-    height: 15px;
-    background: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-/* İlerleme Çubuğu */
-#progress-container {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Çubuk ve zaman göstergesi arası boşluk */
-    padding: 0 5px; /* Kenarlardan hafif boşluk */
-    box-sizing: border-box;
-}
-
-#progress-bar-bg {
-    flex-grow: 1; /* Kalan tüm boşluğu kapla */
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.25);
-    border-radius: 3px;
-    cursor: pointer;
-    overflow: hidden; /* progress-bar'ın dışarı taşmasını engelle */
-}
-
-#progress-bar {
     height: 100%;
-    width: 0%; /* JS ile güncellenecek */
-    background-color: #9284ff;
-    border-radius: 3px;
-    transition: width 0.1s linear; /* Akıcı geçiş için */
-    pointer-events: none; /* Tıklama olaylarının arka plana (progressBarBg) gitmesini sağlar */
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 9999; /* High z-index to be on top */
+    opacity: 0.4; /* Reduced opacity for better visibility of content */
+    filter: saturate(3.0) contrast(2.5); /* Further increased filter intensity */
+    animation: glitch-effect 5s infinite alternate; /* Apply glitch effect */
 }
 
-#time-display {
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.85em;
-    user-select: none; /* Seçilemez yap */
-    min-width: 75px; /* 0:00 / 00:00 gibi yazıların sığması için */
-}
-
-/* Çalma Listesi (Yeniden Düzenlendi) */
-#playlist-box {
-    background: rgba(30, 30, 30, 0.65);
-    backdrop-filter: blur(10px);
+#vhs-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    box-sizing: border-box;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    
-    /* Flexbox ile iç düzeni daha stabil hale getiriyoruz */
-    display: flex;
-    flex-direction: column;
-    
-    /* Animasyon ve başlangıç durumu */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(15px) scale(0.98);
-    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
-
+    height: 100%;
+    background: repeating-linear-gradient(
+        #000 0px,
+        #000 2px,
+        transparent 2px,
+        transparent 4px
+    );
+    opacity: 0.5; /* Further increased opacity */
+    animation: scanline-flicker 0.1s infinite alternate; /* Even faster flicker */
 }
 
-#playlist-box.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+#vhs-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(255, 0, 0, 0.15), /* Slightly more intense red */
+        rgba(0, 255, 0, 0.15), /* Slightly more intense green */
+        rgba(0, 0, 255, 0.15)  /* Slightly more intense blue */
+    );
+    mix-blend-mode: screen; /* Blend colors */
+    opacity: 0.4; /* Further increased opacity */
+    animation: rgb-shift 0.2s infinite alternate; /* Even faster shift */
 }
 
-.playlist-header {
-    padding: 10px 15px;
-    font-family: 'Share Tech Mono', monospace;
-    color: #e0e0e0;
-    font-size: 0.9em;
-    font-weight: bold;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0; /* Başlığın küçülmesini engeller */
-    user-select: none;
+@keyframes scanline-flicker {
+    0% { opacity: 0.3; } /* Adjusted start opacity */
+    100% { opacity: 0.4; } /* Adjusted end opacity */
 }
 
-#playlist-ul {
-    list-style: none;
-    margin: 0;
-    padding: 8px; /* Kenarlara boşluk */
-    color: #e0e0e0;
-    font-family: 'Share Tech Mono', monospace;
-    
-    /* Kaydırılabilir alan */
-    overflow-y: auto;
-    max-height: 220px; /* Yaklaşık 6-7 şarkı */
-    
-    /* Tarayıcı uyumlu kaydırma çubuğu stilleri */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(146, 132, 255, 0.7) rgba(255, 255, 255, 0.1);
+@keyframes rgb-shift {
+    0% { transform: translateX(0px); }
+    100% { transform: translateX(6px); } /* Increased shift distance */
 }
 
-/* Webkit tabanlı tarayıcılar için özel kaydırma çubuğu */
-#playlist-ul::-webkit-scrollbar {
-    width: 8px;
-}
-#playlist-ul::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-#playlist-ul::-webkit-scrollbar-thumb {
-    background: rgba(146, 132, 255, 0.7); /* Ana renk tonu */
-    border-radius: 10px;
+@keyframes glitch-effect {
+    0% {
+        filter: hue-rotate(0deg) saturate(1) contrast(1);
+    }
+    20% {
+        filter: hue-rotate(5deg) saturate(1.2) contrast(1.1);
+    }
+    40% {
+        filter: hue-rotate(-5deg) saturate(0.8) contrast(0.9);
+    }
+    60% {
+        filter: hue-rotate(10deg) saturate(1.3) contrast(1.2);
+    }
+    80% {
+        filter: hue-rotate(-10deg) saturate(0.7) contrast(0.8);
+    }
+    100% {
+        filter: hue-rotate(0deg) saturate(1) contrast(1);
+    }
 }
 
-#playlist-ul li {
-    display: block;
-    padding: 12px 15px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.2s;
-    margin-bottom: 2px; /* Öğeler arasına hafif boşluk */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.animated-computer-image {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-#playlist-ul li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-#playlist-ul li.playing {
-    background-color: rgba(146, 132, 255, 0.4);
-    color: #fff;
-    font-weight: bold;
+
+.animated-computer-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); /* Neon Cyan Glow on hover */
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.85; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 255, 255, 0);
+    }
+    50% {
+        transform: scale(1.01);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 255, 255, 0);
+    }
+}
+
+.animated-computer-image {
+    animation: pulse 2s infinite alternate;
+}
+
+.glitch-header {
+    position: relative;
+    display: inline-block; /* or block, depending on desired layout */
+    color: #00FFFF; /* Default neon cyan */
+    text-shadow: 0 0 5px #00FFFF; /* Initial subtle glow */
+    /* Add transition for smoother non-animated changes if any */
 }

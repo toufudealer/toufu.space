@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>toufu space</title>
+    <link rel="stylesheet" href="style.old.css">
+</head>
+<body>
+  <div id="enter-overlay">
+    <div id="enter-text">girmek için tıkla</div>
+
+  </div>
+  <div class="background-container"></div>
+  <div class="content">
+    <div class="toufu-kutu" style="margin-bottom:16px; text-align:center;">
+      toufudealer
+    </div>
+    <div class="sosyal-medya">
+      <a href="https://github.com/toufudealer" target="_blank" title="GitHub">
+        <img src="../resources/svg/social/github.svg" alt="GitHub" height="32">
+      </a>
+      <a href="https://open.spotify.com/user/ralcqz0nk2sazx60hctyacype?si=3d8aad731bca4601" target="_blank" title="Spotify">
+        <img src="../resources/svg/social/spotify.svg" alt="Spotify" height="32">
+      </a>
+      <a href="https://steamcommunity.com/id/toufudealer/" target="_blank" title="Steam">
+        <img src="../resources/svg/social/steam.svg" alt="Steam" height="32">
+      </a>
+      <a href="https://myanimelist.net/profile/ToufuDealer" target="_blank" title="MyAnimeList">
+        <img src="../resources/svg/social/mal.svg" alt="MyAnimeList" height="32">
+      </a>
+    </div>
+    <button id="yes-btn" class="orta-nokta-buton">evet</button>
+    <button id="yes-what-btn" class="orta-nokta-buton">evet?</button>
+    <button onclick="window.location.href='../index.html'" class="orta-nokta-buton">ana sayfa</button>
+  </div>
+
+  <!-- Oynatıcı Arayüzü Sarmalayıcısı -->
+  <div id="player-ui-container">
+    <!-- Özel Medya Kontrol Butonları -->
+    <div id="media-controls">
+      <!-- İlerleme Çubuğu -->
+      <div id="progress-container">
+        <div id="progress-bar-bg">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="time-display">0:00 / 0:00</div>
+      </div>
+      <div id="main-controls">
+        <button id="playlist-btn" title="Çalma Listesi">☰</button>
+        <button id="play-pause-btn" title="Oynat/Durdur">▶</button>
+        <div id="song-title">Yükleniyor...</div>
+        <button id="prev-btn" title="Önceki Şarkı">«</button>
+        <button id="next-btn" title="Sonraki Şarkı">»</button>
+        <div class="volume-controls">
+            <button id="mute-btn" title="Sesi Aç/Kapat">🔊</button>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
+        </div>
+      </div>
+    </div>
+
+    <!-- Çalma Listesi Kutusu -->
+    <div id="playlist-box">
+      <div class="playlist-header">
+        <span>Çalma Listesi</span>
+      </div>
+      <ul id="playlist-ul"></ul>
+    </div>
+  </div>
+
+  <!-- Arka Planda Çalışacak SoundCloud Oynatıcısı -->
+  <div id="soundcloud-player-container" style="position: absolute; top: -9999px; left: -9999px;">
+    <iframe id="soundcloud-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/2058967170&color=%239284ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
+    </iframe>
+  </div>
+
+  <script src="../background.js"></script>
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script src="player.js"></script>
+  <script src="main.old.js"></script>
+</body>
+</html>

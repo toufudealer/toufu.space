@@ -5,77 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>toufu space</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="enter-overlay">
-    <div id="enter-text">girmek için tıkla</div>
-  </div>
-  <div class="background-container"></div>
-  <div class="content">
-    <div class="toufu-kutu" style="margin-bottom:16px; text-align:center;">
-      toufudealer
-    </div>
-    <div class="sosyal-medya">
-      <a href="https://github.com/toufudealer" target="_blank" title="GitHub">
-        <img src="./resources/svg/github.svg" alt="GitHub" height="32">
-      </a>
-      <a href="https://open.spotify.com/user/ralcqz0nk2sazx60hctyacype?si=3d8aad731bca4601" target="_blank" title="Spotify">
-        <img src="./resources/svg/spotify.svg" alt="Spotify" height="32">
-      </a>
-      <a href="https://steamcommunity.com/id/toufudealer/" target="_blank" title="Steam">
-        <img src="./resources/svg/steam.svg" alt="Steam" height="32">
-      </a>
-      <a href="https://myanimelist.net/profile/ToufuDealer" target="_blank" title="MyAnimeList">
-        <img src="./resources/svg/mal.svg" alt="MyAnimeList" height="32">
-      </a>
-    </div>
-    <button id="yes-btn" class="orta-nokta-buton">evet</button>
-    <button id="yes-what-btn" class="orta-nokta-buton">evet?</button>
-  </div>
-
-  <!-- Oynatıcı Arayüzü Sarmalayıcısı -->
-  <div id="player-ui-container">
-    <!-- Özel Medya Kontrol Butonları -->
-    <div id="media-controls">
-      <!-- İlerleme Çubuğu -->
-      <div id="progress-container">
-        <div id="progress-bar-bg">
-            <div id="progress-bar"></div>
+    <div id="content-wrapper">
+        <div class="main-container">
+            <div class="profile-section" data-aos="fade-down" data-aos-once="true">
+                <div class="profile-box">
+                    <div class="profile-pic-wrapper">
+                        <img src="resources/images/profile.jpeg" alt="Profile Picture" class="profile-pic">
+                    </div>
+                    <div class="username">toufudealer</div>
+                </div>
+            </div>
+            <div class="social-media-section" data-aos="fade-up" data-aos-once="true">
+                <div class="social-media-links">
+                    <a href="https://github.com/toufudealer" target="_blank" class="social-icon" title="GitHub">
+                        <img src="resources/svg/social/github.svg" alt="GitHub" height="32">
+                    </a>
+                    <a href="https://open.spotify.com/user/ralcqz0nk2sazx60hctyacype?si=3d8aad731bca4601" target="_blank" class="social-icon" title="Spotify">
+                        <img src="resources/svg/social/spotify.svg" alt="Spotify" height="32">
+                    </a>
+                    <a href="https://steamcommunity.com/id/toufudealer/" target="_blank" class="social-icon" title="Steam">
+                        <img src="resources/svg/social/steam.svg" alt="Steam" height="32">
+                    </a>
+                    <a href="https://myanimelist.net/profile/ToufuDealer" target="_blank" class="social-icon" title="MyAnimeList">
+                        <img src="resources/svg/social/mal.svg" alt="MyAnimeList" height="32">
+                    </a>
+                </div>
+            </div>
+            <div class="navigation-section" data-aos="fade-up" data-aos-once="true">
+                <a href="yes.html" class="nav-button">Yes Page</a>
+                <a href="yeswhat.html" class="nav-button">Yes What Page</a>
+                <a href="olds/index.old.html" class="nav-button">Old Index Page</a>
+            </div>
+            <div class="about-me-section" data-aos="fade-right" data-aos-once="true">
+                <h2 class="glitch-header">About Me</h2>
+                <p>Hi! I’m a passionate graphic designer with a strong interest in web development and creating engaging user experiences. I’m also an average anime enjoyer and mostly play Counter-Strike 2. </p>
+            </div>
         </div>
-        <div id="time-display">0:00 / 0:00</div>
-      </div>
-      <div id="main-controls">
-        <button id="playlist-btn" title="Çalma Listesi">☰</button>
-        <button id="play-pause-btn" title="Oynat/Durdur">▶</button>
-        <div id="song-title">Yükleniyor...</div>
-        <button id="prev-btn" title="Önceki Şarkı">«</button>
-        <button id="next-btn" title="Sonraki Şarkı">»</button>
-        <div class="volume-controls">
-            <button id="mute-btn" title="Sesi Aç/Kapat">🔊</button>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2">
+        <div id="scroll-box">
+            <div class="scroll-box-section scroll-box-heading-container">
+                <h2 class="glitch-header" style="margin-bottom: 0; margin-top: 0;">My System</h2>
+            </div>
+            <div class="computer-info-container scroll-box-section" data-aos="fade-left" data-aos-once="true">
+                <div class="computer-image-container" style="flex: 1; min-width: 300px; margin: 10px; text-align: center;">
+                    
+                    <img src="resources/images/pc.png" alt="Computer Image" class="animated-computer-image" style="max-width: 100%; height: auto; border-radius: 8px;">
+                </div>
+                <div class="system-specs-container scroll-box-section">
+                    <h3 class="glitch-header">System Specifications</h3>
+                    <ul>
+                        <li><strong>CPU:</strong> AMD Ryzen™ 7 6800H Mobile Processor</li>
+                        <li><strong>GPU:</strong> NVIDIA® GeForce RTX™ 3050 Laptop GPU</li>
+                        <li><strong>RAM:</strong> 8x2 16GB DDR5-4800MHz</li>
+                        <li><strong>Storage:</strong> 512GB + 1TB M.2 NVMe™ PCIe® 3.0 SSD</li>
+                        <li><strong>OS:</strong> Windows 11 Pro</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="skills-container scroll-box-section" data-aos="fade-up" data-aos-once="true">
+                <h2 class="glitch-header" style="margin-bottom: 10px; margin-top: 0;">My Skills</h2>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                    <img class="skill-badge" src="https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobe-photoshop&logoColor=white" alt="Photoshop">
+                    <img class="skill-badge" src="https://img.shields.io/badge/Krita-225588?style=for-the-badge&logo=krita&logoColor=white" alt="Krita">
+                    <img class="skill-badge" src="https://img.shields.io/badge/After%20Effects-9999FF?style=for-the-badge&logo=adobe-after-effects&logoColor=white" alt="After Effects">
+                    <img class="skill-badge" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+                    <img class="skill-badge" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
+                    <img class="skill-badge" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+                    <img class="skill-badge" src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-
-    <!-- Çalma Listesi Kutusu -->
-    <div id="playlist-box">
-      <div class="playlist-header">
-        <span>Çalma Listesi</span>
-      </div>
-      <ul id="playlist-ul"></ul>
-    </div>
-  </div>
-
-  <!-- Arka Planda Çalışacak SoundCloud Oynatıcısı -->
-  <div id="soundcloud-player-container" style="position: absolute; top: -9999px; left: -9999px;">
-    <iframe id="soundcloud-widget" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-      src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/2058967170&color=%239284ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
-    </iframe>
-  </div>
-
-  <script src="background.js"></script>
-  <script src="https://w.soundcloud.com/player/api.js"></script>
-  <script src="player.js"></script>
-  <script src="main.js"></script>
+    <div id="vhs-overlay"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    <script src="main.js"></script>
 </body>
 </html>
