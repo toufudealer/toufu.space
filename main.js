@@ -278,3 +278,27 @@ window.addEventListener('load', () => {
         observer.observe(header);
     });
 });
+
+// TV Static effect on social links
+document.addEventListener('DOMContentLoaded', () => {
+    const socialLinks = document.querySelectorAll('.social-icon');
+    const staticOverlay = document.getElementById('static-overlay');
+
+    if (socialLinks.length > 0 && staticOverlay) {
+        socialLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const url = this.href;
+
+                staticOverlay.classList.add('active');
+
+                setTimeout(() => {
+                    window.open(url, '_blank');
+                    setTimeout(() => {
+                        staticOverlay.classList.remove('active');
+                    }, 200);
+                }, 800); // Match the animation duration
+            });
+        });
+    }
+});
