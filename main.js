@@ -48,6 +48,50 @@ window.addEventListener('load', () => {
 
     startGlitchLoop(); // Start the glitch loop
 
+    // Global Glitch Effect (Signal Distortion)
+    const bodyElement = document.body; // Target the body for global effect
+
+    function applyGlobalGlitch() {
+        anime.timeline({
+            targets: bodyElement,
+            duration: 150, // Short, sharp glitch
+            easing: 'steps(1)', // Step animation for glitch effect
+            direction: 'alternate',
+            complete: () => {
+                // Ensure properties are reset after glitch
+                bodyElement.style.transform = '';
+                bodyElement.style.filter = '';
+            }
+        })
+        .add({
+            translateX: () => anime.random(-20, 20),
+            translateY: () => anime.random(-20, 20),
+            scaleX: [
+                { value: [1, 0.9, 1.1, 1], duration: 75 }
+            ],
+            scaleY: [
+                { value: [1, 1.1, 0.9, 1], duration: 75 }
+            ],
+            skewX: () => anime.random(-10, 10),
+            skewY: () => anime.random(-10, 10),
+            filter: [
+                { value: 'hue-rotate(0deg) contrast(100%) saturate(100%) brightness(100%)', duration: 0 },
+                { value: 'hue-rotate(90deg) contrast(150%) saturate(200%) brightness(120%)', duration: 75 },
+                { value: 'hue-rotate(0deg) contrast(100%) saturate(100%) brightness(100%)', duration: 75 }
+            ]
+        });
+    }
+
+    function startGlobalGlitchLoop() {
+        const randomDelay = anime.random(5000, 15000); // Glitch every 5 to 15 seconds
+        setTimeout(() => {
+            applyGlobalGlitch();
+            startGlobalGlitchLoop(); // Loop the global glitch
+        }, randomDelay);
+    }
+
+    startGlobalGlitchLoop(); // Start the global glitch loop
+
     // VHS Overlay Animation
     anime({
         targets: vhsOverlay,
@@ -70,9 +114,22 @@ window.addEventListener('load', () => {
         ],
         loop: true,
         direction: 'alternate',
-                duration: 500, // Faster overall cycle
-        easing: 'linear'
+                easing: 'linear'
     });
+
+    // Parallax effect for the background - WIDEN UPWARDS EFFECT
+    const parallaxBg = document.getElementById('parallax-bg');
+    if (parallaxBg) {
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            // Adjust the parallax factor as needed. Smaller value means less movement.
+            const parallaxFactor = 0.3;
+            // Calculate background-position-y. Negative scrollY for upward movement.
+            const backgroundPositionY = -scrollY * parallaxFactor;
+            parallaxBg.style.backgroundPositionY = `${backgroundPositionY}px`;
+        });
+    }
+
 
     // Fish-eye effect based on scroll position
     const contentWrapper = document.getElementById('content-wrapper');
@@ -253,22 +310,40 @@ window.addEventListener('load', () => {
                         targets: header,
                         loop: true, // Loop the glitch effect
                         direction: 'alternate',
-                        duration: 100, // Fast flicker
+                        duration: 80, // Slightly faster flicker
                         easing: 'steps(1)', // Step animation for glitch effect
                         color: [
-                            { value: '#00FFFF', duration: 50 }, // Neon Cyan
-                            { value: '#FF00FF', duration: 50 }, // Neon Pink
-                            { value: '#00FF00', duration: 50 }  // Neon Green
+                            { value: '#00FFFF', duration: 40 }, // Neon Cyan
+                            { value: '#FF00FF', duration: 40 }, // Neon Pink
+                            { value: '#00FF00', duration: 40 }  // Neon Green
                         ],
                         textShadow: [
-                            { value: '0 0 5px #00FFFF', duration: 50 },
-                            { value: '0 0 10px #FF00FF', duration: 50 },
-                            { value: '0 0 5px #00FF00', duration: 50 }
+                            { value: '0 0 5px #00FFFF', duration: 40 },
+                            { value: '0 0 10px #FF00FF', duration: 40 },
+                            { value: '0 0 5px #00FF00', duration: 40 }
                         ],
-                        translateX: () => anime.random(-2, 2),
-                        translateY: () => anime.random(-2, 2),
-                        skewX: () => anime.random(-1, 1),
-                        skewY: () => anime.random(-1, 1)
+                        translateX: () => anime.random(-10, 10), // Increased range for sliding
+                        translateY: () => anime.random(-10, 10), // Increased range for sliding
+                        skewX: () => anime.random(-5, 5), // More aggressive skew
+                        skewY: () => anime.random(-5, 5), // More aggressive skew
+                        scaleX: [
+                            { value: [1, 0.9, 1.1, 1], duration: 80 } // Signal distortion: horizontal stretch/compress
+                        ],
+                        scaleY: [
+                            { value: [1, 1.1, 0.9, 1], duration: 80 } // Signal distortion: vertical stretch/compress
+                        ],
+                        filter: [
+                            { value: 'brightness(100%) contrast(100%)', duration: 0 },
+                            { value: 'brightness(150%) contrast(120%)', duration: 40 }, // Brighter, higher contrast
+                            { value: 'brightness(80%) contrast(130%)', duration: 40 },  // Darker, even higher contrast
+                            { value: 'brightness(100%) contrast(100%)', duration: 0 }
+                        ],
+                        // Simulate text cut-off with clip-path
+                        clipPath: [
+                            { value: 'inset(0 0 0 0)', duration: 0 },
+                            { value: () => `inset(${anime.random(0, 50)}% 0 ${anime.random(0, 50)}% 0)`, duration: 40 },
+                            { value: 'inset(0 0 0 0)', duration: 40 }
+                        ]
                     });
                     observer.disconnect(); // Disconnect after starting the loop
                 }
