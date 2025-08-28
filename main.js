@@ -149,7 +149,7 @@ window.addEventListener('load', () => {
     // Social media icon hover animations
     const socialIcons = document.querySelectorAll('.social-icon');
     socialIcons.forEach(icon => {
-        icon.addEventListener('mouseenter', () => {
+        const enterAnimation = () => {
             anime({
                 targets: icon,
                 scale: 1.2, // Scale up to 120%
@@ -157,9 +157,9 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
 
-        icon.addEventListener('mouseleave', () => {
+        const leaveAnimation = () => {
             anime({
                 targets: icon,
                 scale: 1, // Scale back to original size
@@ -167,13 +167,18 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
+
+        icon.addEventListener('mouseenter', enterAnimation);
+        icon.addEventListener('mouseleave', leaveAnimation);
+        icon.addEventListener('touchstart', enterAnimation);
+        icon.addEventListener('touchend', leaveAnimation);
     });
 
     // Profile picture hover animation
     const profilePicWrapper = document.querySelector('.profile-pic-wrapper'); // Target the wrapper for the border animation
     if (profilePicWrapper) {
-        profilePicWrapper.addEventListener('mouseenter', () => {
+        const enterAnimation = () => {
             anime({
                 targets: profilePic,
                 scale: 1.05,
@@ -186,9 +191,9 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
 
-        profilePicWrapper.addEventListener('mouseleave', () => {
+        const leaveAnimation = () => {
             anime({
                 targets: profilePic,
                 scale: 1,
@@ -201,13 +206,18 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
+
+        profilePicWrapper.addEventListener('mouseenter', enterAnimation);
+        profilePicWrapper.addEventListener('mouseleave', leaveAnimation);
+        profilePicWrapper.addEventListener('touchstart', enterAnimation);
+        profilePicWrapper.addEventListener('touchend', leaveAnimation);
     }
 
     // Username hover animation
     const usernameElement = document.querySelector('.username');
     if (usernameElement) {
-        usernameElement.addEventListener('mouseenter', () => {
+        const enterAnimation = () => {
             anime({
                 targets: usernameElement,
                 color: '#FF00FF', // Change to Neon Pink
@@ -215,9 +225,9 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
 
-        usernameElement.addEventListener('mouseleave', () => {
+        const leaveAnimation = () => {
             anime({
                 targets: usernameElement,
                 color: '#FFFFFF', // Revert to white
@@ -225,7 +235,12 @@ window.addEventListener('load', () => {
                 duration: 300,
                 easing: 'easeOutQuad'
             });
-        });
+        };
+
+        usernameElement.addEventListener('mouseenter', enterAnimation);
+        usernameElement.addEventListener('mouseleave', leaveAnimation);
+        usernameElement.addEventListener('touchstart', enterAnimation);
+        usernameElement.addEventListener('touchend', leaveAnimation);
     }
 
     // Glitch animation for headers

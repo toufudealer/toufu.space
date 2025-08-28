@@ -339,3 +339,43 @@ h1 {
     text-shadow: 0 0 5px #00FFFF; /* Initial subtle glow */
     /* Add transition for smoother non-animated changes if any */
 }
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+        width: 95%;
+    }
+
+    .profile-section {
+        flex: 1;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .social-media-section,
+    .navigation-section,
+    .about-me-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    #scroll-box {
+        width: 95%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .computer-info-container {
+        flex-direction: column;
+    }
+
+    .system-specs-container {
+        text-align: center;
+    }
+
+    .system-specs-container ul {
+        padding-left: 0;
+        list-style-position: inside;
+    }
+}
